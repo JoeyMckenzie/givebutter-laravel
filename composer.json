@@ -1,0 +1,142 @@
+{
+    "name": "joeymckenzie/givebutter-laravel",
+    "description": "Givebutter API client for Laravel.",
+    "license": "MIT",
+    "keywords": [
+        "givebutter",
+        "api-client"
+    ],
+    "authors": [
+        {
+            "name": "Joey McKenzie",
+            "email": "joey.mckenzie27@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/joeymckenzie/givebutter-laravel",
+    "require": {
+        "php": "^8.4",
+        "guzzlehttp/guzzle": "^7.9.3",
+        "illuminate/contracts": "^12.0",
+        "joeymckenzie/givebutter-php": "^0.1",
+        "laravel/framework": "^12.12"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.47",
+        "larastan/larastan": "^3.5",
+        "laravel/pint": "^1.22",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^10.4",
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin-arch": "^3.1",
+        "pestphp/pest-plugin-laravel": "^3.2",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "rector/rector": "^2.1"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Givebutter\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Givebutter\\Laravel\\GivebutterServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare",
+            "@composer run prepare"
+        ],
+        "check": [
+            "@test:mutate",
+            "@fmt:test",
+            "@lint",
+            "@refactor:test",
+            "@typos"
+        ],
+        "ci": [
+            "@lint:ci",
+            "@fmt:test",
+            "@refactor:test",
+            "@test:ci",
+            "@typos"
+        ],
+        "fix": [
+            "@refactor",
+            "@fmt"
+        ],
+        "fmt": "vendor/bin/pint",
+        "fmt:test": "vendor/bin/pint --test",
+        "lint": "XDEBUG_MODE=off vendor/bin/phpstan analyze",
+        "lint:ci": "XDEBUG_MODE=off vendor/bin/phpstan analyze --error-format=github",
+        "lint:clear": "vendor/bin/phpstan clear-result-cache",
+        "prep": [
+            "@fix",
+            "@check"
+        ],
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "prepare:githooks": "git config core.hookspath .githooks",
+        "refactor": "vendor/bin/rector process",
+        "refactor:test": "vendor/bin/rector process --dry-run",
+        "test": "vendor/bin/pest --parallel",
+        "test:ci": [
+            "@test:coverage",
+            "@test:mutate",
+            "@test:types"
+        ],
+        "test:coverage": "vendor/bin/pest --coverage-clover coverage.xml --parallel",
+        "test:mutate": "vendor/bin/pest --mutate --min=100 --parallel",
+        "test:mutate:cache-clear": "vendor/bin/pest --mutate --min=100 --clear-cache",
+        "test:mutate:sync": "vendor/bin/pest --mutate --min=100",
+        "test:sync": "vendor/bin/pest",
+        "test:types": "vendor/bin/pest --type-coverage --min=100",
+        "test:watch": [
+            "Composer\\Config::disableProcessTimeout",
+            "vendor/bin/pest --parallel --watch"
+        ],
+        "test:watchmu": [
+            "Composer\\Config::disableProcessTimeout",
+            "vendor/bin/pest --watch --parallel --mutate"
+        ],
+        "typos": "vendor/bin/peck",
+        "testbench:clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "testbench:build": "@php vendor/bin/testbench workbench:build --ansi",
+        "testbench:serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ]
+    }
+}
