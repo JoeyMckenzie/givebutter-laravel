@@ -8,10 +8,13 @@ use Givebutter\Exceptions\GivebutterClientException;
 use Givebutter\Laravel\GivebutterServiceProvider;
 use Illuminate\Config\Repository;
 
+covers(GivebutterServiceProvider::class);
+
 describe(GivebutterServiceProvider::class, function () {
     beforeEach(function () {
         $this->app = app();
     });
+
     it('binds the client on the container', function () {
         // Arrange & Act
         $this->app->bind('config', fn () => new Repository([
@@ -42,8 +45,10 @@ describe(GivebutterServiceProvider::class, function () {
     });
 
     it('requires an api key', function () {
-        // Arrange & Act
-        config()->set('givebutter.api_key', '');
+        // Act
+        $this->app->bind('config', fn () => new Repository([]));
+
+        // Act
         new GivebutterServiceProvider($this->app)->register();
 
         // Assert

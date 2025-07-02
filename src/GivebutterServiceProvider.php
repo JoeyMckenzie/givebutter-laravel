@@ -7,22 +7,29 @@ namespace Givebutter\Laravel;
 use Carbon\Laravel\ServiceProvider;
 use Givebutter\Client;
 use Givebutter\Contracts\ClientContract;
+use Givebutter\Exceptions\GivebutterClientException;
 use Givebutter\Givebutter;
 use Givebutter\Laravel\Commands\InstallCommand;
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Override;
 
 final class GivebutterServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register any application services.
      */
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         $this->app->singleton(ClientContract::class, static function (): Client {
             $apiKey = config('givebutter.api_key');
             $baseUri = config('givebutter.base_uri', Client::API_BASE_URL);
             $timeout = config('givebutter.timeout', 30);
+
+            if ($apiKey === null) {
+                throw GivebutterClientException::apiKeyMissing();
+            }
+
             $client = Givebutter::builder()
                 ->withApiKey($apiKey)
                 ->withHttpClient(new \GuzzleHttp\Client(
@@ -49,7 +56,7 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
     /**
      * Bootstrap any application services.
      */
-    #[\Override]
+    #[Override]
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {
@@ -68,7 +75,7 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
      *
      * @return array<int, string>
      */
-    #[\Override]
+    #[Override]
     public function provides(): array
     {
         return [

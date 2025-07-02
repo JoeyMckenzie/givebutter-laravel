@@ -7,6 +7,7 @@ namespace Givebutter\Laravel\Commands;
 use Givebutter\Laravel\Commands\Concerns\RendersOutput;
 use Givebutter\Laravel\GivebutterServiceProvider;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Process;
 
 final class InstallCommand extends Command
 {
@@ -96,6 +97,6 @@ final class InstallCommand extends Command
             $this->warnColumn('Could not determine which browser to open on the OS.');
         }
 
-        exec($command);
+        Process::run($command);
     }
 }
