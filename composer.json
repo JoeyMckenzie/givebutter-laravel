@@ -30,6 +30,7 @@
         "pestphp/pest": "^3.8",
         "pestphp/pest-plugin-arch": "^3.1",
         "pestphp/pest-plugin-laravel": "^3.2",
+        "pestphp/pest-plugin-type-coverage": "^3.5",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-deprecation-rules": "^2.0",
@@ -69,7 +70,6 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "@clear",
             "@prepare",
             "@composer run prepare"
         ],
