@@ -1,0 +1,52 @@
+name: Run CI
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - '.github/workflows/run-ci.yml'
+      - 'phpunit.xml.dist'
+      - 'phpstan.neon.dist'
+      - 'composer.json'
+      - 'composer.lock'
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ 8.4 ]
+        stability: [ prefer-lowest, prefer-stable ]
+
+
+    name: PHP ${{ matrix.php }} | ${{ matrix.stability }} | ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Run CI checks
+        run: bin/ci
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload coverage reports to Codecov
+        # Only need to upload code coverage once
+        if: ${{ !cancelled() && matrix.php == '8.4' && matrix.stability == 'prefer-stable' && github.ref == 'refs/heads/main' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        # Only need to upload code coverage once
+        if: ${{ !cancelled() && matrix.php == '8.4' && matrix.stability == 'prefer-stable' && github.ref == 'refs/heads/main' }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

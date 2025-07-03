@@ -10,14 +10,14 @@ use Illuminate\Config\Repository;
 
 covers(GivebutterServiceProvider::class);
 
-describe(GivebutterServiceProvider::class, function () {
-    beforeEach(function () {
+describe(GivebutterServiceProvider::class, function (): void {
+    beforeEach(function (): void {
         $this->app = app();
     });
 
-    it('binds the client on the container', function () {
+    it('binds the client on the container', function (): void {
         // Arrange & Act
-        $this->app->bind('config', fn () => new Repository([
+        $this->app->bind('config', fn (): Repository => new Repository([
             'givebutter' => [
                 'api_key' => 'test',
             ],
@@ -29,9 +29,9 @@ describe(GivebutterServiceProvider::class, function () {
         expect($this->app->get(Client::class))->toBeInstanceOf(Client::class);
     });
 
-    it('binds the client on the container as singleton', function () {
+    it('binds the client on the container as singleton', function (): void {
         // Arrange & Act
-        $this->app->bind('config', fn () => new Repository([
+        $this->app->bind('config', fn (): Repository => new Repository([
             'givebutter' => [
                 'api_key' => 'test',
             ],
@@ -44,9 +44,9 @@ describe(GivebutterServiceProvider::class, function () {
         expect($this->app->get(Client::class))->toBe($client);
     });
 
-    it('requires an api key', function () {
+    it('requires an api key', function (): void {
         // Act
-        $this->app->bind('config', fn () => new Repository([]));
+        $this->app->bind('config', fn (): Repository => new Repository([]));
 
         // Act
         new GivebutterServiceProvider($this->app)->register();
@@ -58,7 +58,7 @@ describe(GivebutterServiceProvider::class, function () {
         'API key is required to call Givebutter\'s API.',
     );
 
-    it('provides using class, contract, and string references', function () {
+    it('provides using class, contract, and string references', function (): void {
         // Arrange & Act
         $provides = new GivebutterServiceProvider($this->app)->provides();
 
