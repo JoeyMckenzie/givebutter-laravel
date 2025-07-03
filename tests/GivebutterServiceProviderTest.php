@@ -44,6 +44,21 @@ describe(GivebutterServiceProvider::class, function (): void {
         expect($this->app->get(Client::class))->toBe($client);
     });
 
+    it('aliases the client contract to givebutter string', function (): void {
+        // Arrange & Act
+        $this->app->bind('config', fn (): Repository => new Repository([
+            'givebutter' => [
+                'api_key' => 'test',
+            ],
+        ]));
+
+        new GivebutterServiceProvider($this->app)->register();
+        $client = $this->app->get(Client::class);
+
+        // Assert
+        expect($this->app->get('givebutter'))->toBe($client);
+    });
+
     it('requires an api key', function (): void {
         // Act
         $this->app->bind('config', fn (): Repository => new Repository([]));

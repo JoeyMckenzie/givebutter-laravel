@@ -11,30 +11,151 @@
 
 # 🧈 Givebutter for Laravel
 
-Givebutter for Laravel is a plug 'n play HTTP client for Givebutter's public API built for Laravel.
+**Givebutter PHP** for Laravel is a PHP API client that allows you to interact with the
+[Givebutter API](https://docs.givebutter.com). This package provides integration with Laravel for a seamless experience.
+
+> **Note:** This repository contains the integration code of the **Givebutter PHP** for Laravel. If you want to use
+> the *
+*Givebutter PHP** client in a framework-agnostic way, take a look at
+> the [joeymckenzie/givebutter-php](https://github.com/joeymckenzie/givebutter-php) repository.
 
 ## Table of Contents
 
 - [Getting started](#getting-started)
-- [Notes](#notes)
 - [Usage](#usage)
-    - [Campaigns](#campaigns)
-    - [Campaign Members](#campaign-members)
-    - [Campaign Teams](#campaign-teams)
-    - [Contacts](#contacts)
-    - [Tickets](#tickets)
-    - [Transactions](#transactions)
-    - [Payouts](#payouts)
-    - [Funds](#funds)
+- [Configuration](#usage)
 
-## Getting started
+## Getting Started
 
-The client is available as a composer packager that can be installed in any project using composer:
+> **Requires [PHP 8.4+](https://www.php.net/releases/)**
+
+Install Givebutter PHP via [Composer](https://getcomposer.org/):
 
 ```bash
 composer require joeymckenzie/givebutter-laravel
 ```
 
-For a comprehensive overview of what the Givebutter client offers, please refer to
-the [documentation](https://github.com/JoeyMckenzie/givebutter-php/blob/main/README.md)
-for details.
+Then, run the install command:
+
+```bash
+php artisan givebutter:install
+```
+
+This will create a `config/givebutter.php` configuration file in your project, which you can modify to your needs
+using environment variables. A blank environment variable for the Givebutter API key will be appended to your `.env` and
+`.env.example` files.
+
+```env
+GIVEBUTTER_API_KEY=...
+```
+
+Once the install command finishes, update your `GIVEBUTTER_API_KEY` with an appropriate value. You may use the
+`Givebutter` facade to access the Givebutter API:
+
+```php
+use Givebutter\Laravel\Facades\Givebutter;
+
+$response = Givebutter::campaigns()->create([
+    'title' => 'Campaign title',
+    'description' => 'Campaign description.',
+    'end_at' => CarbonImmutable::now()->toIso8601String(),
+    'goal' => 10000,
+    'subtitle' => 'Campaign subtitle',
+    'slug' => 'campaignSlug123',
+    'type' => 'collect',
+]);
+
+echo $response->data(); // GetCampaignResponse::class
+echo $response->id; // 42
+echo $response->title; // 'Campaign title'
+echo $response->goal; // 10000
+echo $response->toArray(); // ['id' => 42, ...]
+```
+
+## Configuration
+
+Configuration is done via environment variables or directly in the configuration file (`config/givebutter.php`).
+
+### Givebutter API Key
+
+Specify your Givebutter API Key and organization. This will be used to authenticate with the Givebutter API. You can
+generate an API key within the Givebutter dashboard under the **Integrations** section.
+
+```env
+GIVEBUTTER_API_KEY=
+```
+
+### Givebutter API Base URI
+
+The base URI for the Givebutter API. By default, this is set to `https://api.givebutter.com/v1`.
+
+```env
+GIVEBUTTER_BASE_URL=
+```
+
+### Request Timeout
+
+The timeout may be used to specify the maximum number of seconds to wait for a response. By default, the client will
+time out after 30 seconds.
+
+```env
+GIVEBUTTER_REQUEST_TIMEOUT=
+```
+
+## Usage
+
+For usage examples, take a look at the [joeymckenzie/givebutter-php](https://github.com/joeymckenzie/givebutter-php)
+repository.
+
+## Testing
+
+The `Givebutter` facade comes with a `fake()` method that allows you to fake the API responses. Fake responses are
+returned in the order they are provided to the `fake()` method. All responses have a `fake()` method that allows you to
+easily create a response object by only providing the parameters relevant for your test case.
+
+```php
+use Givebutter\Laravel\Facades\Givebutter;
+use Givebutter\Responses\Campaigns\GetCampaignResponse;
+use Givebutter\Testing\Fixtures\Campaigns;
+
+$fake = Givebutter::fake([
+    GetCampaignResponse::fake(GetCampaignFixture::class, [
+        'description' => 'This is an override of the default fixture data.',
+    ]),
+]);
+
+$campaign = Givebutter::campaigns()->create([
+    'title' => 'Campaign title',
+    'description' => 'Campaign description.',
+    'end_at' => CarbonImmutable::now()->toIso8601String(),
+    'goal' => 10000,
+    'subtitle' => 'Campaign subtitle',
+    'slug' => 'campaignSlug123',
+    'type' => 'collect',
+]);
+
+expect($campaign->description)->toBe('This is an override of the default fixture data.');
+```
+
+Fake responses expect a data fixture as well. Data fixtures are available for each response type. See the
+[joeymckenzie/givebutter-php](https://github.com/JoeyMckenzie/givebutter-php/tree/main/src/Testing/Fixtures) repository
+for the available fixture responses.
+
+After the request has been sent, there are various methods to ensure that the expected requests were sent:
+
+```php
+// assert completion create request was sent
+$fake->proxy->assertSent(Campaigns::class, function (string $method, array $parameters): bool {
+    return $method === 'create' &&
+        $parameters[0]['title'] === 'Campaign title' &&
+        $parameters[0]['description'] === 'This is an override of the default fixture data.';
+});
+```
+
+For more testing examples, take a look at the
+[joeymckenzie/givebutter-php](https://github.com/joeymckenzie/givebutter-php#testing) repository.
+
+---
+
+Givebutter PHP for Laravel is an open-sourced software licensed under the *
+*[MIT license](https://opensource.org/licenses/MIT)**.
