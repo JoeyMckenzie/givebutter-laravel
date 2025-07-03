@@ -15,9 +15,6 @@ use Override;
 
 final class GivebutterServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Register any application services.
-     */
     #[Override]
     public function register(): void
     {
@@ -53,9 +50,6 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
         $this->app->alias(ClientContract::class, Client::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     #[Override]
     public function boot(): void
     {
@@ -71,8 +65,6 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
     }
 
     /**
-     * Get the services provided by the provider.
-     *
      * @return array<int, string>
      */
     #[Override]
