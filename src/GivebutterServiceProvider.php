@@ -19,8 +19,13 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
     public function register(): void
     {
         $this->app->singleton(ClientContract::class, static function (): Client {
+            /** @var ?string $apiKey */
             $apiKey = config('givebutter.api_key');
+
+            /** @var ?string $apiKey */
             $baseUri = config('givebutter.base_uri', Client::API_BASE_URL);
+
+            /** @var ?int $timeout */
             $timeout = config('givebutter.timeout', 30);
 
             if ($apiKey === null) {
@@ -35,7 +40,7 @@ final class GivebutterServiceProvider extends ServiceProvider implements Deferra
                     ]
                 ));
 
-            if ($baseUri === null) {
+            if (! is_string($baseUri)) {
                 $baseUri = Client::API_BASE_URL;
             }
 

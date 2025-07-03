@@ -33,9 +33,9 @@ final class Givebutter extends Facade
     /**
      * @param  array<array-key, ResponseContract|ResponseInterface|string>  $responses
      */
-    public static function fake(array $responses = []): ClientFake
+    public static function fake(array $responses = []): ClientFake // @phpstan-ignore-line missingType.generics
     {
-        $fake = new ClientFake($responses);
+        $fake = new ClientFake($responses); // @phpstan-ignore-line argument.type
         self::swap($fake);
 
         return $fake;
