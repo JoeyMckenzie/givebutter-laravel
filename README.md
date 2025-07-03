@@ -23,6 +23,7 @@
 - [Getting started](#getting-started)
 - [Usage](#usage)
 - [Configuration](#usage)
+- [Testing](#testing)
 
 ## Getting Started
 
