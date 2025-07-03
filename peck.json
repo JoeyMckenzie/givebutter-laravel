@@ -1,0 +1,13 @@
+{
+    "preset": "laravel",
+    "ignore": {
+        "words": [
+            "php",
+            "givebutter",
+            "lefthook"
+        ],
+        "paths": [
+            "tests"
+        ]
+    }
+}
