@@ -157,5 +157,5 @@ For more testing examples, take a look at the
 
 ---
 
-Givebutter PHP for Laravel is an open-sourced software licensed under the *
-*[MIT license](https://opensource.org/licenses/MIT)**.
+Givebutter PHP for Laravel is an open-sourced software licensed under the
+**[MIT license](https://opensource.org/licenses/MIT)**.
