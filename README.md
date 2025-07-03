@@ -118,7 +118,7 @@ use Givebutter\Laravel\Facades\Givebutter;
 use Givebutter\Responses\Campaigns\GetCampaignResponse;
 use Givebutter\Testing\Fixtures\Campaigns;
 
-$fake = Givebutter::fake([
+Givebutter::fake([
     GetCampaignResponse::fake(GetCampaignFixture::class, [
         'description' => 'This is an override of the default fixture data.',
     ]),
@@ -145,7 +145,7 @@ After the request has been sent, there are various methods to ensure that the ex
 
 ```php
 // assert completion create request was sent
-$fake->proxy->assertSent(Campaigns::class, function (string $method, array $parameters): bool {
+Givebutter::assertSent(Campaigns::class, function (string $method, array $parameters): bool {
     return $method === 'create' &&
         $parameters[0]['title'] === 'Campaign title' &&
         $parameters[0]['description'] === 'This is an override of the default fixture data.';

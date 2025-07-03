@@ -62,13 +62,13 @@ describe(Givebutter::class, function (): void {
 
     it('can append more fake responses', function (): void {
         // Arrange
-        $fake = Givebutter::fake([
+        Givebutter::fake([
             GetCampaignResponse::fake(GetCampaignFixture::class, [
                 'description' => 'test description',
             ]),
         ]);
 
-        $fake->proxy->addResponses([
+        Givebutter::addResponses([
             GetCampaignResponse::fake(GetCampaignFixture::class, [
                 'description' => 'another test description',
             ]),
@@ -100,7 +100,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertSent(CampaignsResource::class, fn (string $method, array $parameters): bool => $method === 'create' &&
+        Givebutter::assertSent(CampaignsResource::class, fn (string $method, array $parameters): bool => $method === 'create' &&
             $parameters[0]['title'] === 'test title' &&
             $parameters[0]['description'] === 'test description');
     });
@@ -112,7 +112,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Act & Assert
-        $fake->proxy->assertSent(CampaignsResource::class, fn (string $method, array $parameters): bool => $method === 'create' &&
+        Givebutter::assertSent(CampaignsResource::class, fn (string $method, array $parameters): bool => $method === 'create' &&
             $parameters[0]['title'] === 'test title' &&
             $parameters[0]['description'] === 'test description');
     })->throws(ExpectationFailedException::class);
@@ -136,7 +136,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertSent(CampaignsResource::class, 2);
+        Givebutter::assertSent(CampaignsResource::class, 2);
     });
 
     it('can throw an exception if a request was not sent any number of times', function (): void {
@@ -153,7 +153,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertSent(CampaignsResource::class, 2);
+        Givebutter::assertSent(CampaignsResource::class, 2);
     })->throws(ExpectationFailedException::class);
 
     it('can assert a request was not sent', function (): void {
@@ -161,7 +161,7 @@ describe(Givebutter::class, function (): void {
         $fake = Givebutter::fake();
 
         // Assert
-        $fake->proxy->assertNotSent(CampaignsResource::class);
+        Givebutter::assertNotSent(CampaignsResource::class);
     });
 
     it('throws an exception if an unexpected request was sent', function (): void {
@@ -177,7 +177,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertNotSent(CampaignsResource::class);
+        Givebutter::assertNotSent(CampaignsResource::class);
     })->throws(ExpectationFailedException::class);
 
     it('can assert a request was not sent on the resource', function (): void {
@@ -187,7 +187,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertNotSent(CampaignsResource::class);
+        Givebutter::assertNotSent(CampaignsResource::class);
     });
 
     it('can assert no request was sent', function (): void {
@@ -198,7 +198,7 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertNothingSent();
+        Givebutter::assertNothingSent();
     });
 
     it('throws an exception if any request was sent when non was expected', function (): void {
@@ -214,6 +214,6 @@ describe(Givebutter::class, function (): void {
         ]);
 
         // Assert
-        $fake->proxy->assertNothingSent();
+        Givebutter::assertNothingSent();
     })->throws(ExpectationFailedException::class);
 });
