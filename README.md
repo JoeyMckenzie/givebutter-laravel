@@ -15,8 +15,7 @@
 [Givebutter API](https://docs.givebutter.com). This package provides integration with Laravel for a seamless experience.
 
 > **Note:** This repository contains the integration code of the **Givebutter PHP** for Laravel. If you want to use
-> the *
-*Givebutter PHP** client in a framework-agnostic way, take a look at
+> the **Givebutter PHP** client in a framework-agnostic way, take a look at
 > the [joeymckenzie/givebutter-php](https://github.com/joeymckenzie/givebutter-php) repository.
 
 ## Table of Contents
