@@ -9,6 +9,8 @@
     </div>
 </div>
 
+------
+
 > This package was heavily inspired by [openai-php/laravel](https://github.com/openai-php/laravel). Consider giving it
 > a star to support the Laravel community!
 
